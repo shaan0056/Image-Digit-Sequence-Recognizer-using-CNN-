@@ -20,6 +20,8 @@ if __name__ == "__main__":
                 if dir == 'train':
                     for count,files in enumerate(os.listdir(root_path+dir+'/'+classes)):
                         if count < min_count:
+                            if not os.path.exists(dest_path +dir+'/'+classes):
+                                os.mkdir(dest_path +dir+'/'+classes)
                             shutil.copy2(root_path +dir+'/'+classes+'/'+files,
                                          dest_path +dir+'/'+classes)
 
