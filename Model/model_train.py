@@ -3,10 +3,11 @@ import tensorflow as tf
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
-PROCESSED_TRAIN_PATH = "../Data/processed/train/"
-PROCESSED_VALID_PATH = "../Data/processed/valid/"
-PROCESSED_TEST_PATH  = "../Data/processed/test/"
+PROCESSED_TRAIN_PATH = "../Data/Final/train/"
+PROCESSED_VALID_PATH = "../Data/Final/valid/"
+PROCESSED_TEST_PATH  = "../Data/Final/test/"
 EPOCHS = 10
 BATCH_SIZE = 128
 INPUT_SIZE = (32,32,3)
@@ -43,7 +44,7 @@ if __name__ == "__main__":
                                                                     width_shift_range=0.2,
                                                                     height_shift_range=0.2,
                                                                     zoom_range=0.2,
-                                                                    brightness_range=0.2,
+                                                                    brightness_range=[0.5,1.5],
                                                                     rotation_range=30)
 
     test_datagen  = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255)
@@ -58,7 +59,7 @@ if __name__ == "__main__":
                                               write_grads=False, write_images=False, embeddings_freq=0,
                                               embeddings_layer_names=None, embeddings_metadata=None)
 
-    model.fit_generator(
+    history = model.fit_generator(
         train_loader,
         steps_per_epoch=train_loader.samples // BATCH_SIZE,
         epochs=EPOCHS,
@@ -75,3 +76,20 @@ if __name__ == "__main__":
 
     print("Test Accuracy: {:.4f}".format(score[1]))
 
+    # summarize history for accuracy
+    plt.plot(history.history['acc'])
+    plt.plot(history.history['val_acc'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.savefig("accuracy.jpg")
+    plt.clf()
+    # summarize history for loss
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.savefig("loss.jpg")
