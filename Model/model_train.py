@@ -4,6 +4,7 @@ import tensorflow as tf
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import pickle
 
 PROCESSED_TRAIN_PATH = "../Data/Final/train/"
 PROCESSED_VALID_PATH = "../Data/Final/valid/"
@@ -75,6 +76,9 @@ if __name__ == "__main__":
     score = best_model.evaluate_generator(test_loader)
 
     print("Test Accuracy: {:.4f}".format(score[1]))
+
+    with open('trainHistoryDict', 'wb') as file_pi:
+        pickle.dump(history.history, file_pi)
 
     # summarize history for accuracy
     plt.plot(history.history['acc'])
