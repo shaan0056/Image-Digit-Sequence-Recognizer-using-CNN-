@@ -31,7 +31,7 @@ if __name__ == "__main__":
     model.add(tf.keras.layers.Dense(512))
     model.add(tf.keras.layers.Activation('relu'))
     model.add(tf.keras.layers.Dropout(0.3))
-    model.add(tf.keras.layers.Dense(10))
+    model.add(tf.keras.layers.Dense(11))
     model.add(tf.keras.layers.Activation('softmax'))
 
     print(model.summary())
