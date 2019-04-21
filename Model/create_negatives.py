@@ -1,7 +1,6 @@
 
 import cv2
-import numpy as np
-import os, sys
+import os
 
 image_path = "../Data/Negatives/"
 dest_path_train = "../Data/Final/train/10.0/"
@@ -9,9 +8,9 @@ dest_path_train = "../Data/Final/train/10.0/"
 dest_path_test = "../Data/Final/test/10.0/"
 dest_path_valid = "../Data/Final/valid/10.0/"
 
-train_count = 45000
-test_count  = 2000
-valid_count = 500
+train_count = 45000 * 10
+test_count  = 2000 * 0
+valid_count = 500 * 0
 window = (32,32)
 crop_out = (200,200)
 
@@ -36,11 +35,11 @@ for images in negative_images:
             image_count +=1
             if image_count <= train_count:
                 cv2.imwrite(dest_path_train + "{}.png".format(image_count),crop)
-            if image_count > train_count and image_count <= train_count + test_count:
-                cv2.imwrite(dest_path_test + "{}.png".format(image_count),crop)
-            if image_count > train_count + test_count and \
-                    image_count <= train_count + test_count + valid_count:
-                cv2.imwrite(dest_path_valid + "{}.png".format(image_count),crop)
+            # if image_count > train_count and image_count <= train_count + test_count:
+            #     cv2.imwrite(dest_path_test + "{}.png".format(image_count),crop)
+            # if image_count > train_count + test_count and \
+            #         image_count <= train_count + test_count + valid_count:
+            #     cv2.imwrite(dest_path_valid + "{}.png".format(image_count),crop)
 
 
 
