@@ -1,6 +1,5 @@
 
 import tensorflow as tf
-
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -12,14 +11,9 @@ import pickle
 PROCESSED_TRAIN_PATH = "../Data/Final/train/"
 PROCESSED_VALID_PATH = "../Data/Final/valid/"
 PROCESSED_TEST_PATH  = "../Data/Final/test/"
-EPOCHS = 10
-BATCH_SIZE = 128
+EPOCHS = 100
+BATCH_SIZE = 256
 INPUT_SIZE = (32,32,3)
-
-#load data
-
-# train_metadata = pd.read_csv(PROCESSED_TRAIN_PATH+'metadata.csv')
-# test_metadata  = pd.read_csv(PROCESSED_TEST_PATH+'metadata.csv')
 
 
 
@@ -40,8 +34,10 @@ if __name__ == "__main__":
 
         print(model.summary())
 
+        sgd = tf.keras.optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+
         model.compile(loss=tf.keras.losses.categorical_crossentropy,
-                      optimizer='adam',
+                      optimizer=sgd,
                       metrics=['accuracy'])
 
         train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255,
@@ -59,9 +55,9 @@ if __name__ == "__main__":
         Checkpoint = tf.keras.callbacks.ModelCheckpoint("myCNN.h5", monitor='val_acc', mode='max', verbose=0,
                                                      save_best_only=True, save_weights_only=False, period=1)
         early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_acc', min_delta=0, patience=5, verbose=0, mode='max')
-        tensorboard = tf.keras.callbacks.TensorBoard(log_dir="log_dir", histogram_freq=10, batch_size=BATCH_SIZE, write_graph=True,
-                                                  write_grads=False, write_images=False, embeddings_freq=0,
-                                                  embeddings_layer_names=None, embeddings_metadata=None)
+        reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.2,
+                                      patience=5, min_lr=0.001)
+
 
         history = model.fit_generator(
             train_loader,
@@ -70,7 +66,7 @@ if __name__ == "__main__":
             verbose=1,
             validation_data=valid_loader,
             validation_steps=valid_loader.samples // BATCH_SIZE,
-            callbacks=[Checkpoint,early_stopping])
+            callbacks=[Checkpoint,early_stopping,reduce_lr])
 
         test_loader = test_datagen.flow_from_directory(PROCESSED_TEST_PATH, batch_size=BATCH_SIZE,target_size=INPUT_SIZE[:2])
 
@@ -83,8 +79,8 @@ if __name__ == "__main__":
         with open('trainHistoryDict', 'wb') as file_pi:
             pickle.dump(history.history, file_pi)
 
-        # file_in = open('trainHistoryDict','rb')
-        # history = pickle.load(file_in,encoding='latin1')
+        file_in = open('trainHistoryDict','rb')
+        history = pickle.load(file_in,encoding='latin1')
 
         # summarize history for accuracy
         plt.plot(history['acc'])
