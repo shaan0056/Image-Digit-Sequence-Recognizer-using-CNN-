@@ -5,8 +5,8 @@ import pandas as pd
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-
 import pickle
+
 
 PROCESSED_TRAIN_PATH = "../Data/Final/train/"
 PROCESSED_VALID_PATH = "../Data/Final/valid/"
@@ -58,7 +58,7 @@ if __name__ == "__main__":
         early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_acc', min_delta=0, patience=5, verbose=0, mode='max')
         reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.2,
                                       patience=5, min_lr=0.0001)
-
+        csv_logger = tf.keras.callbacks.CSVLogger('log.csv', append=True, separator=';')
 
         history = model.fit_generator(
             train_loader,
@@ -67,7 +67,7 @@ if __name__ == "__main__":
             verbose=1,
             validation_data=valid_loader,
             validation_steps=valid_loader.samples // BATCH_SIZE,
-            callbacks=[Checkpoint,early_stopping,reduce_lr])
+            callbacks=[Checkpoint,early_stopping,reduce_lr,csv_logger])
 
         test_loader = test_datagen.flow_from_directory(PROCESSED_TEST_PATH, batch_size=BATCH_SIZE,target_size=INPUT_SIZE[:2])
 
@@ -82,6 +82,8 @@ if __name__ == "__main__":
 
         file_in = open('trainHistoryDict','rb')
         history = pickle.load(file_in,encoding='latin1')
+
+        pd.DataFrame(history).to_csv('history.csv')
 
         # summarize history for accuracy
         plt.plot(history['acc'])
