@@ -35,6 +35,7 @@ if __name__ == "__main__":
         print(model.summary())
 
         sgd = tf.keras.optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+        adam = tf.keras.optimizers.Adam(lr=0.01, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.001, amsgrad=False)
 
         model.compile(loss=tf.keras.losses.categorical_crossentropy,
                       optimizer=sgd,
@@ -56,7 +57,7 @@ if __name__ == "__main__":
                                                      save_best_only=True, save_weights_only=False, period=1)
         early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_acc', min_delta=0, patience=5, verbose=0, mode='max')
         reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.2,
-                                      patience=5, min_lr=0.001)
+                                      patience=5, min_lr=0.0001)
 
 
         history = model.fit_generator(
