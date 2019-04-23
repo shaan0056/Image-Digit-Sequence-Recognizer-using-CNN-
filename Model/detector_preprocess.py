@@ -229,7 +229,7 @@ if __name__ == "__main__":
     #crop the images to 32 X 32
 
     train_df = train_df.sample(frac=0.90)
-    valid_df = train_df.loc[~train.index.isin(train_df.index)]
+    valid_df = train_df.loc[~train_df.index.isin(train_df.index)]
 
     crop_seqimage_and_save(train_df,PROCESSED_TRAIN_PATH,IMAGE_SIZE)
     crop_seqimage_and_save(valid_df, PROCESSED_VALID_PATH, IMAGE_SIZE)
