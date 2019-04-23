@@ -153,12 +153,26 @@ def crop_seqimage_and_save(dataframe,path,new_size):
 
                         cv2.imwrite(file_name, cropped_image)
 
+                    if int(rows['left']) < 32:
+
+                        cropped_image = image[0:32,32:int(rows['image_width'])]
+                        cropped_image = cv2.resize(cropped_image, new_size)
+
+                        cv2.imwrite(file_name, cropped_image)
+
                 if  int(rows['image_height']) - int(rows['bottom']) > 32:
 
                     if int(rows['image_width']) - int(rows['right']) > 32:
 
                         cropped_image = image[int(rows['bottom']):int(rows['image_height']),
                                         int(rows['right']):int(rows['image_width'])]
+                        cropped_image = cv2.resize(cropped_image, new_size)
+
+                        cv2.imwrite(file_name, cropped_image)
+
+                    if int(rows['image_width']) - int(rows['right']) < 32:
+                        cropped_image = image[int(rows['bottom']):int(rows['image_height']),
+                                        0:32]
                         cropped_image = cv2.resize(cropped_image, new_size)
 
                         cv2.imwrite(file_name, cropped_image)
