@@ -195,13 +195,13 @@ if __name__ == "__main__":
 
     create_dir(PROCESSED_TRAIN_PATH,PROCESSED_TEST_PATH,PROCESSED_VALID_PATH)
 
-    train = pd.read_csv(TRAIN_PATH + "train.csv")
+    train_df = pd.read_csv(TRAIN_PATH + "train.csv")
     extra_df = pd.read_csv(EXTRA_PATH + "extra.csv")
-    train = pd.concat([train,extra_df])
+    train_df = pd.concat([train_df,extra_df])
 
     test_df = pd.read_csv(TEST_PATH + "test.csv")
 
-    train_df = perform_aggregation(train)
+    train_df = perform_aggregation(train_df)
     test_df  = perform_aggregation(test_df)
 
    # draw_random_image(train_df)
@@ -228,8 +228,8 @@ if __name__ == "__main__":
 
     #crop the images to 32 X 32
 
-    train_df = train.sample(frac=0.90)
-    valid_df = train.loc[~train.index.isin(train_df.index)]
+    train_df = train_df.sample(frac=0.90)
+    valid_df = train_df.loc[~train.index.isin(train_df.index)]
 
     crop_seqimage_and_save(train_df,PROCESSED_TRAIN_PATH,IMAGE_SIZE)
     crop_seqimage_and_save(valid_df, PROCESSED_VALID_PATH, IMAGE_SIZE)
