@@ -196,8 +196,8 @@ if __name__ == "__main__":
     create_dir(PROCESSED_TRAIN_PATH,PROCESSED_TEST_PATH,PROCESSED_VALID_PATH)
 
     train_df = pd.read_csv(TRAIN_PATH + "train.csv")
-    extra_df = pd.read_csv(EXTRA_PATH + "extra.csv")
-    train_df = pd.concat([train_df,extra_df])
+    # extra_df = pd.read_csv(EXTRA_PATH + "extra.csv")
+    # train_df = pd.concat([train_df,extra_df])
 
     test_df = pd.read_csv(TEST_PATH + "test.csv")
 
@@ -228,8 +228,8 @@ if __name__ == "__main__":
 
     #crop the images to 32 X 32
 
-    train_df = train_df.sample(frac=0.90)
-    valid_df = train_df.loc[~train_df.index.isin(train_df.index)]
+    sample = train_df.sample(frac=0.90)
+    valid_df = train_df.loc[~train_df.index.isin(sample.index)]
 
     crop_seqimage_and_save(train_df,PROCESSED_TRAIN_PATH,IMAGE_SIZE)
     crop_seqimage_and_save(valid_df, PROCESSED_VALID_PATH, IMAGE_SIZE)
