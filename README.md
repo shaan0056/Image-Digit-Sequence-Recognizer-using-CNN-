@@ -6,8 +6,8 @@
    <div><img src="Images/3.jpg" width="150" hspace="10"></div>
    <div><img src="Images/4.jpg" width="150" hspace="10"></div>
    <div><img src="Images/5.jpg" width="150" hspace="10"></div>
-  
   </figure>
+  
   
 To design the digit detection and recognition system, the famous [SVHN dataset](http://ufldl.stanford.edu/housenumbers/) was
 utilized, which is a real-world dataset obtained from Google Street View images and used by many
